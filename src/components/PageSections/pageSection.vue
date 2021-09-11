@@ -1,22 +1,36 @@
 <template>
-  <div class="gridContainer">
-    <div
+  <v-row class="pagesContainer">
+    <v-col
       v-for="(item, index) in pages"
       :key="index"
-      class="gridItem"
-      @mouseenter="mouseEnter"
-      @mouseleave="mouseLeave"
+      class="d-flex child-flex"
+      cols="6"
     >
-      <div class="imageContainer">
-        <img class="coverImage" :src="item.fields.coverImage.fields.file.url" />
-        <div class="imageOverlay" />
-      </div>
-
-      <h2 class="textTitle">{{ item.fields.title }}</h2>
-    </div>
-  </div>
+      <v-hover v-slot="{ hover }">
+        <div @click="handleClick(item)">
+          <v-img
+            :src="item.fields.coverImage.fields.file.url"
+            aspect-ratio="1.7778"
+            class="grey lighten-2"
+          >
+            <template v-slot:placeholder>
+              <v-row class="fill-height ma-0" align="center" justify="center">
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+            <v-fade-transition>
+              <v-overlay v-if="hover" absolute color="#ffffff"> </v-overlay>
+            </v-fade-transition>
+          </v-img>
+          <h2 class="textTitle">{{ item.fields.title }}</h2>
+        </div>
+      </v-hover>
+    </v-col>
+  </v-row>
 </template>
-
 <script>
 export default {
   data() {
@@ -37,19 +51,17 @@ export default {
   },
 
   methods: {
-    mouseLeave() {
-      console.log("sup");
-    },
-
-    mouseEnter() {
-      console.log("dup");
+    handleClick(item) {
+      console.log(item);
     },
 
     getAllContent() {
       var string = "";
+      const map = new Map();
 
       for (let index = 0; index < this.Section.content.length; index++) {
         const element = this.Section.content[index].sys.id;
+        map.set(element, {});
         if (index != this.Section.content.length - 1) {
           string += element + ",";
         } else {
@@ -60,7 +72,13 @@ export default {
         "sys.id[in]": string,
       }).then((response) => {
         var result = response.items;
-        this.pages = result;
+        result.forEach((element) => {
+          map.set(element.sys.id, element);
+        });
+
+        const array = Array.from(map, ([_, value]) => value);
+
+        this.pages = array;
       });
     },
   },
@@ -68,16 +86,7 @@ export default {
 </script>
 
 <style>
-.gridContainer {
-  display: grid;
-  margin-top: 64px;
-  grid-template-columns: repeat(2, 1fr);
-  grid-auto-rows: 1fr;
-  grid-column-gap: 30px;
-  grid-row-gap: 30px;
-}
-
-.coverImage {
-  max-height: 100%;
+.pagesContainer {
+  padding: 32px;
 }
 </style>

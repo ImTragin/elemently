@@ -46,9 +46,11 @@ export default {
 
     getAllImages() {
       var string = "";
+      const map = new Map();
 
       for (let index = 0; index < this.Section.content.length; index++) {
         const element = this.Section.content[index].sys.id;
+        map.set(element, {});
         if (index != this.Section.content.length - 1) {
           string += element + ",";
         } else {
@@ -60,11 +62,15 @@ export default {
       }).then((response) => {
         var result = response.items;
         result.forEach((image) => {
-          console.log(image);
-          this.images.push({
-            src: image.fields.file.fields.file.url,
-            title: image.fields.file.fields.description,
+          result.forEach((image) => {
+            map.set(image.sys.id, {
+              src: image.fields.file.fields.file.url,
+              title: image.fields.file.fields.description,
+            });
           });
+
+          const array = Array.from(map, ([_, value]) => value);
+          this.images = array;
         });
       });
     },

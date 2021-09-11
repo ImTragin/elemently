@@ -1,11 +1,12 @@
-import Vue from 'vue'
-import App from './App.vue'
-import store from './store'
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import App from "./App.vue";
+import store from "./store";
+import VueRouter from "vue-router";
+import Vuetify from "vuetify/lib";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import contentfulMixins from "./mixins/contentfulMixins";
-import router from './router'
+import router from "./router";
 const contenful = require("contentful");
 import Page from "./components/Page.vue";
 const client = contenful.createClient({
@@ -14,11 +15,12 @@ const client = contenful.createClient({
 });
 
 // Importing the global css file
-import "@/assets/global.scss"
+import "@/assets/global.scss";
 
 Vue.mixin(contentfulMixins);
-Vue.use(VueRouter)
-Vue.config.productionTip = false
+Vue.use(VueRouter);
+Vue.config.productionTip = false;
+Vue.use(Vuetify);
 
 import {
   faTwitterSquare,
@@ -26,34 +28,39 @@ import {
   faDeviantart,
 } from "@fortawesome/free-brands-svg-icons";
 
+import vuetify from "./plugins/vuetify";
 
 library.add([faTwitterSquare, faInstagramSquare, faDeviantart]);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
-console.log("Setting up new Vue")
+console.log("Setting up new Vue");
 
 new Vue({
   router,
   store,
-  render: h => h(App),
-  
+  render: (h) => h(App),
+
   methods: {
     getDynamicRoutes() {
-      client.getEntries({
-        content_type: "page",
-      }).then((response) => {  
-        response.items.forEach(route => {
-          this.$router.addRoute({
-            name: route.fields.title,
-            path: `/${route.fields.slug ? route.fields.slug : ""}`,
-            component: Page,
-            props: { PageId: route.sys.id },
-          })
+      client
+        .getEntries({
+          content_type: "page",
+        })
+        .then((response) => {
+          response.items.forEach((route) => {
+            this.$router.addRoute({
+              name: route.fields.title,
+              path: `/${route.fields.slug ? route.fields.slug : ""}`,
+              component: Page,
+              props: { PageId: route.sys.id },
+            });
+          });
         });
-    })}
+    },
   },
 
-  
-  created () {
-    this.getDynamicRoutes()
-  }
-}).$mount('#app')
+  vuetify,
+
+  created() {
+    this.getDynamicRoutes();
+  },
+}).$mount("#app");
