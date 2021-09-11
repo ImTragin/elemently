@@ -60,6 +60,7 @@ export default {
       }).then((response) => {
         var result = response.items;
         result.forEach((image) => {
+          console.log(image);
           this.images.push({
             src: image.fields.file.fields.file.url,
             title: image.fields.file.fields.description,
@@ -93,6 +94,7 @@ export default {
   },
 
   beforeMount() {
+    console.log(this.Section);
     this.getAllImages();
   },
 };
