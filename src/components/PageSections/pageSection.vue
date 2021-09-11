@@ -52,7 +52,9 @@ export default {
 
   methods: {
     handleClick(item) {
-      console.log(item);
+      this.$router.push(
+        this.$router.history.current.path + "/" + item.fields.slug
+      );
     },
 
     getAllContent() {

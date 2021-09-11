@@ -40,20 +40,53 @@ new Vue({
   render: (h) => h(App),
 
   methods: {
+    //TODO make this recursive and cleanup the code..
+
     getDynamicRoutes() {
       client
         .getEntries({
           content_type: "page",
         })
         .then((response) => {
+          var responseRoutes = response.items;
+
+          const routes = [];
+
+          const pagesWithSubRoutes = [];
+
           response.items.forEach((route) => {
-            this.$router.addRoute({
+            if (route.fields.pageSections != null) {
+              route.fields.pageSections.forEach((section) => {
+                if (section.sys.contentType != null) {
+                  if (section.sys.contentType.sys.id == "pageSection") {
+                    section.fields.content.forEach((page) => {
+                      routes.push({
+                        name: page.fields.title,
+                        path: `/${route.fields.slug ? route.fields.slug : ""}/${
+                          page.fields.slug
+                        }`,
+                        component: Page,
+                        props: { PageId: page.sys.id },
+                      });
+
+                      responseRoutes.splice(responseRoutes.indexOf(page), 1);
+                    });
+                  }
+                }
+              });
+            }
+          });
+
+          response.items.forEach((route) => {
+            routes.push({
               name: route.fields.title,
               path: `/${route.fields.slug ? route.fields.slug : ""}`,
               component: Page,
               props: { PageId: route.sys.id },
             });
           });
+
+          this.$router.addRoutes(routes);
         });
     },
   },
