@@ -1,10 +1,11 @@
 .header-container {
-    display: flex;
-    height: 119px;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-  }
+  box-shadow: 5px;
+  display: flex;
+  height: 119px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
 
 $colorLightPrimary: #fff;
 $colorLightSecondary: #ddd;
@@ -13,4 +14,3 @@ $colorLightTertiary: #60a1b1;
 $colorDarkPrimary: #000;
 $colorDarkSecondary: #444;
 $colorDarkTertiary: #d30198;
-

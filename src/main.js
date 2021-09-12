@@ -9,6 +9,8 @@ import contentfulMixins from "./mixins/contentfulMixins";
 import router from "./router";
 const contenful = require("contentful");
 import Page from "./components/Page.vue";
+import VueMeta from "vue-meta";
+
 const client = contenful.createClient({
   space: "r1wfevxudzi5",
   accessToken: "Mgp0hGKiO1LeLM3Z0uAlSeu-nVKR4aQpsno_-vNCKwc",
@@ -21,6 +23,7 @@ Vue.mixin(contentfulMixins);
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
+Vue.use(VueMeta);
 
 import {
   faTwitterSquare,
@@ -33,6 +36,12 @@ import vuetify from "./plugins/vuetify";
 library.add([faTwitterSquare, faInstagramSquare, faDeviantart]);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 console.log("Setting up new Vue");
+
+router.afterEach((to, from) => {
+  Vue.nextTick(() => {
+    document.title = `${to.name} - Martina Scafa` || "Martina Scafa";
+  });
+});
 
 new Vue({
   router,
@@ -58,7 +67,7 @@ new Vue({
             if (route.fields.pageSections != null) {
               route.fields.pageSections.forEach((section) => {
                 if (section.sys.contentType != null) {
-                  if (section.sys.contentType.sys.id == "pageSection") {
+                  if (section.sys.contentType.sys.id === "pageSection") {
                     section.fields.content.forEach((page) => {
                       routes.push({
                         name: page.fields.title,

@@ -1,116 +1,209 @@
 <template>
-<div class="header-container" :style="getHeaderStyle()">
-    <h1 :style="getHeaderTextStyle()">Martina Scafa</h1>
-    <div id="nav">
-        <router-link v-for="({slug, title},index) in pages" :key="index" :to="slug" :style="getNavigationStyle()">{{title}}</router-link>
+  <div class="header-container" :style="getHeaderStyle()">
+    <h1 :style="getHeaderTextStyle()" @click="$router.push('/')">
+      Martina Scafa
+    </h1>
+    <div
+      id="nav"
+      v-for="(page, index) in pages"
+      :key="index"
+      :style="cssVars(page.slug)"
+    >
+      <v-menu open-on-hover offset-y>
+        <template v-slot:activator="{ on, attrs }">
+          <h2
+            class="header-item"
+            v-bind="attrs"
+            v-on="on"
+            @click="$router.push(page.slug)"
+          >
+            {{ page.title }}
+          </h2>
+        </template>
+
+        <v-list v-if="getItemsForMenuItem(page).length > 0" dark>
+          <v-list-item
+            v-for="(item, index) in getItemsForMenuItem(page)"
+            :key="index"
+            @click="$router.push(item.fields.slug)"
+            class="sub-menu-item"
+          >
+            <v-list-item-title>{{ item.fields.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    data() {
+  data() {
+    return {
+      pages: [],
+      activeColorPrimary: String,
+      activeColorSecondary: String,
+      isHeaderOverlaid: Boolean,
+      items: [
+        { title: "Click Me" },
+        { title: "Click Me" },
+        { title: "Click Me" },
+        { title: "Click Me 2" },
+      ],
+    };
+  },
+
+  computed: {},
+
+  watch: {
+    $route() {
+      this.updateHeaderStyle();
+    },
+  },
+  methods: {
+    getItemsForMenuItem(page) {
+      var foo = this.pages.find((ele) => ele.title == page.title);
+      console.log(foo.subItems);
+      return foo.subItems;
+    },
+
+    cssVars(slug) {
+      return {
+        "--textColor": this.activeColorPrimary,
+        "--bg-color": this.activeColorSecondary,
+        "--displayHome": this.shouldShow(slug),
+      };
+    },
+
+    shouldShow(slug) {
+      if (slug === "/") {
+        return "none";
+      } else {
+        return "initial";
+      }
+    },
+
+    getPages() {
+      this.getContentfulEntries({
+        content_type: "routes",
+        include: "3",
+      }).then((response) => {
+        response.items[0].fields.pages.forEach((route) => {
+          var subpages = [];
+
+          if (route.fields.pageSections != undefined) {
+            var foo = route.fields.pageSections.forEach((section) => {
+              if (section.sys.contentType.sys.id === "pageSection") {
+                subpages = section.fields.content;
+              }
+            });
+          }
+
+          this.pages.push({
+            slug: `/${route.fields.slug ? route.fields.slug : ""}`,
+            title: route.fields.title,
+            style: {
+              isDarkTheme: route.fields.theme,
+              isHeaderOverlay: route.fields.overlayHeader,
+            },
+            subItems: subpages,
+          });
+        });
+        this.updateHeaderStyle();
+      });
+    },
+
+    updateHeaderStyle() {
+      const page = this.pages.find((page) => page.slug === this.$route.path);
+      if (page != null) {
+        this.activeColorPrimary = page.style.isDarkTheme ? "#fff" : "#000";
+        this.activeColorSecondary = page.style.isDarkTheme ? "#ddd" : "#444";
+        this.isHeaderOverlaid = page.style.isHeaderOverlay;
+      }
+    },
+
+    getHeaderStyle() {
+      if (this.isHeaderOverlaid === true) {
         return {
-            pages: [],
-            activeColorPrimary: String,
-            activeColorSecondary: String,
-            isHeaderOverlaid: Boolean
-
-        }
+          position: "absolute",
+        };
+      }
+      return {
+        marginBottom: "32px",
+        boxShadow: "0px 1px 5px #222222",
+      };
     },
 
-    watch: {
-        $route() {
-            this.updateHeaderStyle()
-        }
+    getHeaderTextStyle() {
+      return {
+        color: this.activeColorPrimary,
+      };
     },
-    methods: {
-        getPages() {
-            this.getContentfulEntries({
-                content_type: "routes"
-            }).then(response => {
-                response.items[0].fields.pages.forEach(route => {
-                    this.pages.push({
-                        slug: `/${route.fields.slug ? route.fields.slug : ""}`,
-                        title: route.fields.title,
-                        style: {
-                            isDarkTheme: route.fields.theme,
-                            isHeaderOverlay: route.fields.overlayHeader
-                        }
-                    })
+  },
 
-                })
-                this.updateHeaderStyle()
-            })
-        },
-
-        updateHeaderStyle() {
-            const page = this.pages.find(page => page.slug == this.$route.path)
-            if (page != null) {
-                this.activeColorPrimary = page.style.isDarkTheme ? "#fff" : "#000"
-                this.activeColorSecondary = page.style.isDarkTheme ? "#ddd" : "#444"
-                this.isHeaderOverlaid = page.style.isHeaderOverlay
-            }
-        },
-
-        getHeaderStyle() {
-            if (this.isHeaderOverlaid == true) {
-                return {
-                    position: "absolute"
-                }
-            }
-        },
-
-        getHeaderTextStyle() {
-            return {
-                color: this.activeColorPrimary,
-            }
-        },
-
-        getNavigationStyle() {
-            return {
-                color: this.activeColorPrimary,
-                //backgroundColor: this.activeColorSecondary
-            }
-        }
-    },
-
-    beforeMount() {
-        this.getPages()
-    },
+  beforeMount() {
+    this.getPages();
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Spinnaker&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Spinnaker&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Questrial&display=swap");
 
 h1 {
-    font-size: 31px;
-    color: #fff;
-    font-weight: normal;
-    text-transform: uppercase;
-    font-family: 'Spinnaker', sans-serif;
+  user-select: none;
+  margin-right: 64px;
+  cursor: pointer;
+  font-size: 31px;
+  letter-spacing: 1.55px;
+  color: #fff;
+  font-weight: normal;
+  text-transform: uppercase;
+  font-family: "Spinnaker", sans-serif;
 }
 
 #nav {
-    display: flex;
-    vertical-align: middle;
-    align-items: center;
-    height: 100%;
+  cursor: pointer;
+  display: flex;
+  vertical-align: middle;
+  align-items: center;
+  height: 100%;
 }
 
-#nav a {
-    font-weight: bold;
-    font-size: 19px;
-    text-align: center;
-    padding: 22px 10px;
-    color: #fff;
-    margin-left: 8px;
-    margin-right: 8px;
+.header-item {
+  display: var(--displayHome);
+  font-family: "Questrial", sans-serif;
+  font-size: 19px;
+  text-align: center;
+  padding: 22px 10px;
+  color: var(--textColor);
+  user-select: none;
+
+  text-transform: uppercase;
+  font-weight: 100;
+  text-decoration: none;
+}
+
+.sub-menu-item {
+}
+
+.sub-menu-item:hover {
+  background: #333;
+}
+
+.header-item:hover {
+  color: #fff;
+  -o-transition: 0.5s;
+  -ms-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+  background-color: var(--bg-color);
 }
 
 #nav a.router-link-exact-active {
-    color: #ddd;
-    background-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  background-color: var(--bg-color);
 }
 </style>
