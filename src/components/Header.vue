@@ -43,6 +43,7 @@ export default {
       pages: [],
       activeColorPrimary: String,
       activeColorSecondary: String,
+      activeColorText: String,
       isHeaderOverlaid: Boolean,
       items: [
         { title: "Click Me" },
@@ -71,6 +72,7 @@ export default {
       return {
         "--textColor": this.activeColorPrimary,
         "--bg-color": this.activeColorSecondary,
+        "--button-text-color": this.activeColorText,
         "--displayHome": this.shouldShow(slug),
       };
     },
@@ -117,7 +119,8 @@ export default {
       const page = this.pages.find((page) => page.slug === this.$route.path);
       if (page != null) {
         this.activeColorPrimary = page.style.isDarkTheme ? "#fff" : "#000";
-        this.activeColorSecondary = page.style.isDarkTheme ? "#ddd" : "#444";
+        this.activeColorSecondary = page.style.isDarkTheme ? "#fff" : "#444";
+        this.activeColorText = page.style.isDarkTheme ? "#444" : "#fff";
         this.isHeaderOverlaid = page.style.isHeaderOverlay;
       }
     },
@@ -193,7 +196,7 @@ h1 {
 }
 
 .header-item:hover {
-  color: #fff;
+  color: var(--button-text-color);
   -o-transition: 0.5s;
   -ms-transition: 0.5s;
   -moz-transition: 0.5s;
@@ -203,7 +206,7 @@ h1 {
 }
 
 #nav a.router-link-exact-active {
-  color: #fff;
+  color: var(--button-text-color);
   background-color: var(--bg-color);
 }
 </style>
