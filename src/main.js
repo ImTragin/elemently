@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import contentfulMixins from "./mixins/contentfulMixins";
 import router from "./router";
 const contenful = require("contentful");
+import * as contentful from "contentful";
 import Page from "./components/Page.vue";
 import VueMeta from "vue-meta";
 

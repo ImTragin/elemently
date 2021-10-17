@@ -57,6 +57,7 @@ export default {
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Georama&display=swap");
 .fade-enter-active,
 .fade-leave-active {
   transition-duration: 0.3s;
@@ -85,7 +86,7 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Georama", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
