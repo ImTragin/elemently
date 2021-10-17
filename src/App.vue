@@ -32,8 +32,8 @@ export default {
   },
 
   metaInfo: {
-    title: "Default Title",
-    titleTemplate: "%s | My Awesome Webapp",
+    title: "Martina Scafa",
+    titleTemplate: "",
   },
 
   methods: {

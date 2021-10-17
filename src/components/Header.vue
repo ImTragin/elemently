@@ -25,7 +25,7 @@
           <v-list-item
             v-for="(item, index) in getItemsForMenuItem(page)"
             :key="index"
-            @click="$router.push(item.fields.slug)"
+            @click="$router.push(page.slug + '/' + item.fields.slug)"
             class="sub-menu-item"
           >
             <v-list-item-title>{{ item.fields.title }}</v-list-item-title>
@@ -45,12 +45,6 @@ export default {
       activeColorSecondary: String,
       activeColorText: String,
       isHeaderOverlaid: Boolean,
-      items: [
-        { title: "Click Me" },
-        { title: "Click Me" },
-        { title: "Click Me" },
-        { title: "Click Me 2" },
-      ],
     };
   },
 
@@ -64,7 +58,6 @@ export default {
   methods: {
     getItemsForMenuItem(page) {
       var foo = this.pages.find((ele) => ele.title == page.title);
-      console.log(foo.subItems);
       return foo.subItems;
     },
 

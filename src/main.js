@@ -95,7 +95,9 @@ new Vue({
             });
           });
 
-          this.$router.addRoutes(routes);
+          routes.forEach((route) => {
+            this.$router.addRoute(route);
+          });
         });
     },
   },
