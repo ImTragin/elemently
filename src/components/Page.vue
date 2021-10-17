@@ -63,7 +63,8 @@ export default {
         sections.map((section) => {
           let contentType = this.getComponentType(section);
           let content = section.fields;
-          let sectionComponent = () => import(`./PageSections/${contentType}`);
+          let sectionComponent = () =>
+            import(`./DynamicComponents/${contentType}`);
           this.PageSections.push({
             sectionComponent,
             content,
