@@ -15,7 +15,7 @@
             class="header-item"
             v-bind="attrs"
             v-on="on"
-            @click="$router.push(page.slug)"
+            @click="handleNavigation(page.slug)"
           >
             {{ page.title }}
           </h2>
@@ -25,7 +25,7 @@
           <v-list-item
             v-for="(item, index) in getItemsForMenuItem(page)"
             :key="index"
-            @click="$router.push(page.slug + '/' + item.fields.slug)"
+            @click="handleNavigation(page.slug + '/' + item.fields.slug)"
             class="sub-menu-item"
           >
             <v-list-item-title>{{ item.fields.title }}</v-list-item-title>
@@ -56,6 +56,12 @@ export default {
     },
   },
   methods: {
+    handleNavigation(route) {
+      if (this.$router.currentRoute.fullPath != route) {
+        this.$router.push(route);
+      }
+    },
+
     getItemsForMenuItem(page) {
       var foo = this.pages.find((ele) => ele.title == page.title);
       return foo.subItems;

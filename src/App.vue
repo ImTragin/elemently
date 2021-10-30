@@ -1,6 +1,6 @@
 <template>
   <div id="app" data-app>
-    <Header />
+    <Header class="header" />
     <transition
       name="fade"
       mode="out-in"
@@ -8,9 +8,9 @@
       @enter="enter"
       @afterEnter="afterEnter"
     >
-      <router-view :key="$route.path" />
+      <router-view class="main" :key="$route.path" />
     </transition>
-    <Footer />
+    <Footer class="footer" />
   </div>
 </template>
 
@@ -81,6 +81,10 @@ export default {
   background: transparent;
 }
 
+.main {
+  flex: 1;
+}
+
 body {
   margin: 0 !important;
 }
@@ -91,6 +95,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
 }
 </style>

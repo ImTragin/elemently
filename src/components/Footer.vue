@@ -35,13 +35,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .wrapper {
-//   min-height: 100%;
-//   position: relative;
-// }
-
-
-
 .footer-container {
   display: flex;
   justify-content: center;
