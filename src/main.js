@@ -11,6 +11,7 @@ const contenful = require("contentful");
 import * as contentful from "contentful";
 import Page from "./components/Page.vue";
 import VueMeta from "vue-meta";
+import Vuelidate from "vuelidate";
 
 const client = contenful.createClient({
   space: "r1wfevxudzi5",
@@ -25,6 +26,7 @@ Vue.use(VueRouter);
 Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(VueMeta);
+Vue.use(Vuelidate);
 
 import {
   faTwitterSquare,

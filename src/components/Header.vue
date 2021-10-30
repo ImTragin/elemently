@@ -87,8 +87,14 @@ export default {
           var subpages = [];
 
           if (route.fields.pageSections != undefined) {
-            var foo = route.fields.pageSections.forEach((section) => {
-              if (section.sys.contentType.sys.id === "pageSection") {
+            route.fields.pageSections.forEach((section) => {
+              console.log(section);
+              if (
+                section.sys != undefined &&
+                section.sys.contenType != undefined &&
+                section.sys.contentType.sys != undefined &&
+                section.sys.contentType.sys.id === "pageSection"
+              ) {
                 subpages = section.fields.content;
               }
             });

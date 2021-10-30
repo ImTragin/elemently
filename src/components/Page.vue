@@ -62,13 +62,15 @@ export default {
         let sections = response.fields.pageSections;
         sections.map((section) => {
           let contentType = this.getComponentType(section);
-          let content = section.fields;
-          let sectionComponent = () =>
-            import(`./DynamicComponents/${contentType}`);
-          this.PageSections.push({
-            sectionComponent,
-            content,
-          });
+          if (contentType != undefined) {
+            let content = section.fields;
+            let sectionComponent = () =>
+              import(`./DynamicComponents/${contentType}`);
+            this.PageSections.push({
+              sectionComponent,
+              content,
+            });
+          }
         });
       }
 
