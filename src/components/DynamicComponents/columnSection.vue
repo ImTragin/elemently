@@ -48,8 +48,6 @@ export default {
       var string = "";
       const map = new Map();
 
-      console.log(this.Section);
-
       const ids = this.Section.content.map((element) => {
         return element.sys.id;
       });

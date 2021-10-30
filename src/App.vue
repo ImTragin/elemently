@@ -1,6 +1,6 @@
 <template>
   <div id="app" data-app>
-    <Header class="header" />
+    <Header />
     <transition
       name="fade"
       mode="out-in"
@@ -10,7 +10,7 @@
     >
       <router-view class="main" :key="$route.path" />
     </transition>
-    <Footer class="footer" />
+    <Footer />
   </div>
 </template>
 

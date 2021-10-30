@@ -96,7 +96,7 @@ export default {
             route.fields.pageSections.forEach((section) => {
               if (
                 section.sys != undefined &&
-                section.sys.contenType != undefined &&
+                section.sys.contentType != undefined &&
                 section.sys.contentType.sys != undefined &&
                 section.sys.contentType.sys.id === "pageSection"
               ) {
