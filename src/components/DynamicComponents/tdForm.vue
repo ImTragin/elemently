@@ -2,36 +2,11 @@
   <div>
     <form>
       <v-container>
-        <v-text-field
-          v-model="name"
-          :counter="10"
-          label="Name"
-          required
-          @input="$v.name.$touch()"
-          @blur="$v.name.$touch()"
-        />
-        <v-text-field
-          v-model="email"
-          label="E-mail"
-          required
-          @input="$v.email.$touch()"
-          @blur="$v.email.$touch()"
-        />
-
-        <v-text-field
-          v-model="subject"
-          label="Subject"
-          required
-          @input="$v.email.$touch()"
-          @blur="$v.email.$touch()"
-        />
-
-        <v-textarea
-          v-model="message"
-          label="Message"
-          required
-          @input="$v.email.$touch()"
-          @blur="$v.email.$touch()"
+        <component
+          v-for="({ component, title }, index) in fieldItems"
+          :key="index"
+          :is="component"
+          :Title="title"
         />
         <v-btn class="mr-4" @click="submit">
           submit
@@ -45,8 +20,33 @@
 const axios = require("axios");
 import { required, maxLength, email } from "vuelidate/lib/validators";
 export default {
-  beforeMount() {
-    console.log("heyo");
+  async beforeMount() {
+    var string = "";
+    const map = new Map();
+    console.log(this.Section.fields);
+    for (let index = 0; index < this.Section.fields.length; index++) {
+      const element = this.Section.fields[index].sys.id;
+      map.set(element, {});
+      if (index != this.Section.fields.length - 1) {
+        string += element + ",";
+      } else {
+        string += element;
+      }
+    }
+    this.getContentfulEntries({
+      "sys.id[in]": string,
+    }).then((response) => {
+      var result = response.items.map((ele) => ele.fields);
+      console.log(result);
+      var foo = result.forEach((element) => {
+        let component = this.convertToCorrectType(element.type);
+        let title = element.title;
+        this.fieldItems.push({
+          component,
+          title,
+        });
+      });
+    });
   },
 
   validations: {
@@ -56,14 +56,21 @@ export default {
     message: { required },
   },
 
+  props: {
+    Section: {
+      type: Object,
+      required: true,
+    },
+  },
+
   data: () => ({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
+    fieldData: {},
+    fieldItems: [],
   }),
 
   methods: {
+    async getComponents() {},
+
     submit() {
       let data = {
         name: this.name,
@@ -74,11 +81,27 @@ export default {
       axios
         .post("https://getform.io/f/22ffb686-af9d-43dc-abfb-88c4b4ca9fe7", data)
         .then(function(response) {
-          console.log(response);
+          (this.name = ""),
+            (this.email = ""),
+            (this.subject = ""),
+            (this.message = "");
         })
         .catch(function(error) {
           console.log(error);
         });
+    },
+
+    convertToCorrectType(contentfulType) {
+      switch (contentfulType) {
+        case "Textfield":
+          return () => import(`./Form/dcTextfield`);
+        case "Textarea":
+          return () => import(`./Form/dcTextarea`);
+        case "Email":
+          return () => import(`./Form/dcEmail`);
+        default:
+          break;
+      }
     },
   },
 };
