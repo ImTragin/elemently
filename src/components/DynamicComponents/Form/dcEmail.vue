@@ -1,6 +1,7 @@
 <template>
   <v-text-field
-    :label="Title"
+    v-model="value[title]"
+    :label="title"
     required
     @input="$v.field.$touch()"
     @blur="$v.field.$touch()"
@@ -14,9 +15,12 @@ export default {
     field: { required, email },
   },
   props: {
-    Title: {
+    title: {
       type: String,
       default: "",
+    },
+    value: {
+      type: Object,
     },
   },
 };

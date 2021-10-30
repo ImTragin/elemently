@@ -6,7 +6,8 @@
           v-for="({ component, title }, index) in fieldItems"
           :key="index"
           :is="component"
-          :Title="title"
+          :title="title"
+          :value="fieldData"
         />
         <v-btn class="mr-4" @click="submit">
           submit
@@ -20,40 +21,28 @@
 const axios = require("axios");
 import { required, maxLength, email } from "vuelidate/lib/validators";
 export default {
-  async beforeMount() {
+  beforeMount() {
     var string = "";
     const map = new Map();
-    console.log(this.Section.fields);
-    for (let index = 0; index < this.Section.fields.length; index++) {
-      const element = this.Section.fields[index].sys.id;
-      map.set(element, {});
-      if (index != this.Section.fields.length - 1) {
-        string += element + ",";
-      } else {
-        string += element;
-      }
-    }
-    this.getContentfulEntries({
-      "sys.id[in]": string,
-    }).then((response) => {
-      var result = response.items.map((ele) => ele.fields);
-      console.log(result);
-      var foo = result.forEach((element) => {
+
+    const ids = this.Section.fields.map((element) => {
+      return element.sys.id;
+    });
+
+    const result = this.getAllContentForIds(ids);
+
+    result.then((response) => {
+      response.forEach((item) => {
+        let element = item.fields;
         let component = this.convertToCorrectType(element.type);
         let title = element.title;
         this.fieldItems.push({
           component,
           title,
         });
+        this.fieldData[title] = "";
       });
     });
-  },
-
-  validations: {
-    name: { required, maxLength: maxLength(30) },
-    email: { required, email },
-    subject: { required, maxLength: maxLength(30) },
-    message: { required },
   },
 
   props: {
@@ -69,25 +58,14 @@ export default {
   }),
 
   methods: {
-    async getComponents() {},
-
     submit() {
-      let data = {
-        name: this.name,
-        email: this.email,
-        subject: this.subject,
-        message: this.message,
-      };
       axios
-        .post("https://getform.io/f/22ffb686-af9d-43dc-abfb-88c4b4ca9fe7", data)
+        .post(
+          "https://getform.io/f/22ffb686-af9d-43dc-abfb-88c4b4ca9fe7",
+          this.fieldData
+        )
         .then(function(response) {
-          (this.name = ""),
-            (this.email = ""),
-            (this.subject = ""),
-            (this.message = "");
-        })
-        .catch(function(error) {
-          console.log(error);
+          console.log(response);
         });
     },
 

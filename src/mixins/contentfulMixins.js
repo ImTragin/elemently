@@ -18,18 +18,33 @@ export default {
       var string = "";
 
       for (let index = 0; index < ids.length; index++) {
-        const element = ids[index].sys.id;
+        const element = ids[index];
         if (index != ids.length - 1) {
           string += element + ",";
         } else {
           string += element;
         }
       }
-      this.getContentfulEntries({
-        "sys.id[in]": string,
-      }).then((response) => {
-        return response;
+
+      let promise = new Promise(function(resolve, reject) {
+        client
+          .getEntries({
+            "sys.id[in]": string,
+          })
+          .then((response) => {
+            var sortedResponse = [];
+
+            ids.forEach((id) => {
+              const item = response.items.find(
+                (element) => element.sys.id == id
+              );
+              sortedResponse.push(item);
+            });
+            resolve(sortedResponse);
+          });
       });
+
+      return promise;
     },
   },
 };

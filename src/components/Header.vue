@@ -88,7 +88,6 @@ export default {
 
           if (route.fields.pageSections != undefined) {
             route.fields.pageSections.forEach((section) => {
-              console.log(section);
               if (
                 section.sys != undefined &&
                 section.sys.contenType != undefined &&
