@@ -50,21 +50,12 @@ export default {
 
       console.log(this.Section);
 
-      for (let index = 0; index < this.Section.content.length; index++) {
-        const element = this.Section.content[index].sys.id;
-        map.set(element, {});
-        if (index != this.Section.content.length - 1) {
-          string += element + ",";
-        } else {
-          string += element;
-        }
-      }
-      this.getContentfulEntries({
-        "sys.id[in]": string,
-      }).then((response) => {
-        var result = response.items;
+      const ids = this.Section.content.map((element) => {
+        return element.sys.id;
+      });
 
-        result.map((element) => {
+      this.getAllContentForIds(ids).then((response) => {
+        response.map((element) => {
           let componentType = this.getComponentType(element);
           let sectionComponent = () =>
             import(`../DynamicComponents/${componentType}`);

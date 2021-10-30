@@ -61,20 +61,12 @@ export default {
       var string = "";
       const map = new Map();
 
-      for (let index = 0; index < this.Section.content.length; index++) {
-        const element = this.Section.content[index].sys.id;
-        map.set(element, {});
-        if (index != this.Section.content.length - 1) {
-          string += element + ",";
-        } else {
-          string += element;
-        }
-      }
-      this.getContentfulEntries({
-        "sys.id[in]": string,
-      }).then((response) => {
-        var result = response.items;
-        result.forEach((element) => {
+      const ids = this.Section.content.map((element) => {
+        return element.sys.id;
+      });
+
+      this.getAllContentForIds(ids).then((response) => {
+        response.forEach((element) => {
           map.set(element.sys.id, element);
         });
 
