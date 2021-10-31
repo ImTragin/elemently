@@ -115,4 +115,8 @@ export default {
   margin: 10px 5px;
   justify-content: center;
 }
+
+::v-deep .cool-lightbox .cool-lightbox-button {
+  padding: 0;
+}
 </style>
