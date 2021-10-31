@@ -25,10 +25,10 @@
           <v-list-item
             v-for="(item, index) in getItemsForMenuItem(page)"
             :key="index"
-            @click="handleNavigation(page.slug + '/' + item.fields.slug)"
+            @click="handleNavigation(item.slug)"
             class="sub-menu-item"
           >
-            <v-list-item-title>{{ item.fields.title }}</v-list-item-title>
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -100,7 +100,18 @@ export default {
                 section.sys.contentType.sys != undefined &&
                 section.sys.contentType.sys.id === "pageSection"
               ) {
-                subpages = section.fields.content;
+                section.fields.content.forEach((element) => {
+                  let slug = "";
+                  slug = `/${element.fields.slug}`;
+                  subpages.push({
+                    slug: slug,
+                    title: element.fields.title,
+                    style: {
+                      isDarkTheme: element.fields.theme,
+                      isHeaderOverlay: element.fields.overlayHeader,
+                    },
+                  });
+                });
               }
             });
           }
@@ -120,8 +131,24 @@ export default {
     },
 
     updateHeaderStyle() {
-      const page = this.pages.find((page) => page.slug === this.$route.path);
-      if (page != null) {
+      let path = this.$route.path;
+      let split = path.split("/");
+
+      let page = undefined;
+
+      if (split.length == 3) {
+        console.log(this.pages);
+        const parent = this.pages.find((page) => page.slug === "/" + split[1]);
+        console.log(parent);
+        if (parent != undefined && parent.subItems != undefined) {
+          let child = parent.subItems.find((item) => item.slug === path);
+          page = child;
+        }
+      } else {
+        page = this.pages.find((page) => page.slug === this.$route.path);
+      }
+
+      if (page != undefined) {
         this.activeColorPrimary = page.style.isDarkTheme ? "#fff" : "#000";
         this.activeColorSecondary = page.style.isDarkTheme ? "#fff" : "#444";
         this.activeColorText = page.style.isDarkTheme ? "#444" : "#fff";

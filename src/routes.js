@@ -14,10 +14,7 @@ let appRoutes = {
         content_type: "page",
       })
       .then((response) => {
-        console.log(response);
-
         response.items.forEach((route) => {
-          console.log(route);
           this.routes.push({
             name: route.fields.title,
             path: `/${route.fields.slug ? route.fields.slug : ""}`,
@@ -25,16 +22,6 @@ let appRoutes = {
             props: { PageId: route.sys.id },
           });
         });
-
-        //   .fields.routes.map((route) => {
-        //         const newRoute = {
-        //           name: route.fields.title,
-        //            path: `/${route.fields.slug ? route.fields.slug : ""}`,
-        //            component: Page,
-        //            props: { PageId: route.sys.id },
-        //         };
-        //          return newRoute;
-        // })
       });
   },
 };

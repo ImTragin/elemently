@@ -90,7 +90,6 @@ export default {
   },
 
   beforeMount() {
-    console.log(this.Section);
     this.getAllImages();
   },
 };

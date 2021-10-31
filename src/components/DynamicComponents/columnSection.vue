@@ -54,15 +54,18 @@ export default {
 
       this.getAllContentForIds(ids).then((response) => {
         response.map((element) => {
-          let componentType = this.getComponentType(element);
-          let sectionComponent = () =>
-            import(`../DynamicComponents/${componentType}`);
-          let content = element.fields;
+          if (element != undefined) {
+            let componentType = this.getComponentType(element);
+            let sectionComponent = () =>
+              import(`../DynamicComponents/${componentType}`);
 
-          this.columnSections.push({
-            sectionComponent,
-            content,
-          });
+            let content = element.fields;
+
+            this.columnSections.push({
+              sectionComponent,
+              content,
+            });
+          }
         });
       });
     },

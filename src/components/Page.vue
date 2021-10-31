@@ -76,7 +76,6 @@ export default {
 
       if (response.fields.headerImage != undefined) {
         this.PageHeaderImage = response.fields.headerImage.fields.file.url;
-        console.log(this.PageHeaderImage);
       } else {
         this.PageHeaderImage = "";
       }

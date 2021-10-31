@@ -9,6 +9,7 @@
       <v-hover v-slot="{ hover }">
         <div @click="handleClick(item)">
           <v-img
+            v-if="isCoverImageAvailable(item)"
             :src="item.fields.coverImage.fields.file.url"
             aspect-ratio="1.7778"
             class="grey lighten-2"
@@ -25,7 +26,7 @@
               <v-overlay v-if="hover" absolute color="#ffffff"> </v-overlay>
             </v-fade-transition>
           </v-img>
-          <h2 class="textTitle">{{ item.fields.title }}</h2>
+          <h2 class="textTitle">{{ item.title }}</h2>
         </div>
       </v-hover>
     </v-col>
@@ -51,10 +52,23 @@ export default {
   },
 
   methods: {
+    isCoverImageAvailable(item) {
+      if (
+        item &&
+        item.fields &&
+        item.fields.coverImage &&
+        item.fields.coverImage.fields &&
+        item.fields.coverImage.fields.file &&
+        item.fields.coverImage.fields.file.url != undefined
+      ) {
+        return true;
+      }
+
+      return false;
+    },
+
     handleClick(item) {
-      this.$router.push(
-        this.$router.history.current.path + "/" + item.fields.slug
-      );
+      this.$router.push("/" + item.fields.slug);
     },
 
     getAllContent() {
