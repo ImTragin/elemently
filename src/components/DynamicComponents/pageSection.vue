@@ -1,6 +1,6 @@
 <template>
   <v-container class="grey lighten-5">
-    <v-row v-masonery>
+    <v-row>
       <v-col
         v-for="(item, index) in pages"
         cols="12"
@@ -12,7 +12,7 @@
           <div @click="handleClick(item)">
             <v-img
               v-if="isCoverImageAvailable(item)"
-              :src="item.fields.coverImage.fields.file.url"
+              :src="getResizedImageUrl(item.fields.coverImage.fields.file.url)"
               aspect-ratio="1.7778"
               class="grey lighten-2"
             >

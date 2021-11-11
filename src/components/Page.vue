@@ -75,7 +75,9 @@ export default {
       }
 
       if (response.fields.headerImage != undefined) {
-        this.PageHeaderImage = response.fields.headerImage.fields.file.url;
+        this.PageHeaderImage = this.getResizedImageUrl(
+          response.fields.headerImage.fields.file.url
+        );
       } else {
         this.PageHeaderImage = "";
       }

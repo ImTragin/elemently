@@ -77,12 +77,6 @@ export default {
     };
   },
 
-  computed: {
-    isMobile: function() {
-      return window.isMobile();
-    },
-  },
-
   watch: {
     $route() {
       this.updateHeaderStyle();
@@ -253,7 +247,6 @@ h1 {
 
 #nav {
   margin-left: 64px;
-
   cursor: pointer;
   display: flex;
   vertical-align: middle;

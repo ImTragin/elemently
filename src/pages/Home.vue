@@ -57,7 +57,6 @@ export default {
       });
 
       this.images = foo;
-      console.log(this.images);
     });
   },
 };

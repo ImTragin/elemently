@@ -24,12 +24,6 @@ export default {
     };
   },
 
-  computed: {
-    isMobile: function() {
-      return window.isMobile();
-    },
-  },
-
   props: {
     Section: {
       type: Object,
@@ -39,7 +33,7 @@ export default {
 
   methods: {
     getColumnCount() {
-      if (window.isMobile()) return 1;
+      if (this.isMobile()) return 1;
       return this.columnSections.size;
     },
 

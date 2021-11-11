@@ -64,7 +64,7 @@ export default {
 
     getURL(index) {
       if (this.images.length > index) {
-        return this.images[index].src;
+        return this.getResizedImageUrl(this.images[index].src);
       }
     },
 
