@@ -1,6 +1,6 @@
 <template>
   <div class="header-container" :style="getHeaderStyle()">
-    <div v-if="isMobile" class="hamburger-button-wrapper">
+    <div v-if="isMobile()" class="hamburger-button-wrapper">
       <img
         src="@/assets/menu.svg"
         class="hamburger-menu"
@@ -10,7 +10,7 @@
     <h1 :style="getHeaderTextStyle()" @click="$router.push('/')">
       Martina Scafa
     </h1>
-    <div id="nav" v-if="!isMobile">
+    <div id="nav" v-if="!isMobile()">
       <div
         v-for="(page, index) in pages"
         :key="index"
@@ -82,6 +82,7 @@ export default {
       this.updateHeaderStyle();
     },
   },
+
   methods: {
     toggleMobileMenu() {
       this.isMobileMenuActive = !this.isMobileMenuActive;
@@ -99,7 +100,7 @@ export default {
       if (this.$router.currentRoute.fullPath != route) {
         this.$router.push(route);
       }
-      if (this.isMobile) {
+      if (this.isMobile()) {
         this.closeMobileMenu();
       }
     },

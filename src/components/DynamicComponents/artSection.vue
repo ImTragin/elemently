@@ -90,6 +90,7 @@ export default {
 }
 
 .art-section {
+  padding: 5px;
   display: flex;
   flex-direction: row;
   justify-content: center;
