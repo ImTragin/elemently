@@ -175,18 +175,23 @@ export default {
 
     updateHeaderStyle() {
       let path = this.$route.path;
-      let split = path.split("/");
 
       let page = undefined;
 
-      if (split.length == 3) {
-        const parent = this.pages.find((page) => page.slug === "/" + split[1]);
-        if (parent != undefined && parent.subItems != undefined) {
-          let child = parent.subItems.find((item) => item.slug === path);
-          page = child;
+      for (let index = 0; index < this.pages.length; index++) {
+        const element = this.pages[index];
+        if (element.slug === path) {
+          page = element;
+          break;
+        } else {
+          for (let index = 0; index < element.subItems.length; index++) {
+            const item = element.subItems[index];
+            if (item.slug === path) {
+              page = item;
+              break;
+            }
+          }
         }
-      } else {
-        page = this.pages.find((page) => page.slug === this.$route.path);
       }
 
       if (page != undefined) {
