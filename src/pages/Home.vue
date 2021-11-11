@@ -44,31 +44,27 @@ export default {
 
   beforeMount() {
     this.getContentfulEntries({
-      content_type: "page"
+      content_type: "page",
     }).then((response) => {
-      console.log(response.items)
-    })
-
+      console.log(response.items);
+    });
 
     this.getContentfulEntries({
       content_type: "artwork",
     }).then((response) => {
-      
-      const foo = response.items.map(element => {
-        return element.fields.file.fields.file.url
+      const foo = response.items.map((element) => {
+        return element.fields.file.fields.file.url;
       });
 
-      this.images = foo
-      console.log(this.images)
-      
+      this.images = foo;
+      console.log(this.images);
     });
   },
 };
 </script>
 
 <style lang="scss" scoped>
-
-.header-container{
+.header-container {
   position: absolute;
 }
 
@@ -78,7 +74,6 @@ export default {
 
 .top-section {
   height: 100vh;
-  background: url("https://cdn.discordapp.com/attachments/362627752274427907/725048918005645332/solas_exchange.png");
   background-size: cover;
   margin-bottom: 30px;
 }

@@ -1,38 +1,66 @@
 <template>
   <div class="header-container" :style="getHeaderStyle()">
+    <div v-if="isMobile" class="hamburger-button-wrapper">
+      <img
+        src="@/assets/menu.svg"
+        class="hamburger-menu"
+        @click="toggleMobileMenu"
+      />
+    </div>
     <h1 :style="getHeaderTextStyle()" @click="$router.push('/')">
       Martina Scafa
     </h1>
-    <div
-      id="nav"
-      v-for="(page, index) in pages"
-      :key="index"
-      :style="cssVars(page.slug)"
-    >
-      <v-menu open-on-hover offset-y>
-        <template v-slot:activator="{ on, attrs }">
-          <h2
-            class="header-item"
-            v-bind="attrs"
-            v-on="on"
-            @click="handleNavigation(page.slug)"
-          >
-            {{ page.title }}
-          </h2>
-        </template>
+    <div id="nav" v-if="!isMobile">
+      <div
+        v-for="(page, index) in pages"
+        :key="index"
+        :style="cssVars(page.slug)"
+      >
+        <v-menu open-on-hover offset-y>
+          <template v-slot:activator="{ on, attrs }">
+            <h2
+              class="menu-item"
+              v-bind="attrs"
+              v-on="on"
+              @click="handleNavigation(page.slug)"
+            >
+              {{ page.title }}
+            </h2>
+          </template>
 
-        <v-list v-if="getItemsForMenuItem(page).length > 0" dark>
-          <v-list-item
+          <v-list v-if="getItemsForMenuItem(page).length > 0" dark>
+            <v-list-item
+              v-for="(item, index) in getItemsForMenuItem(page)"
+              :key="index"
+              @click="handleNavigation(item.slug)"
+              class="sub-menu-item"
+            >
+              <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
+    </div>
+    <v-overlay :value="isMobileMenuActive" opacity="0.8">
+      <div class="overlay-wrapper">
+        <h2
+          v-for="(page, index) in pages"
+          :key="index"
+          :style="cssVars(page.slug)"
+          class="menu-item-mobile"
+          @click="handleNavigation(page.slug)"
+        >
+          {{ page.title }}
+          <h3
             v-for="(item, index) in getItemsForMenuItem(page)"
             :key="index"
-            @click="handleNavigation(item.slug)"
-            class="sub-menu-item"
+            class="sub-menu-item-mobile"
           >
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </div>
+            {{ item.title }}
+          </h3>
+        </h2>
+      </div>
+    </v-overlay>
   </div>
 </template>
 
@@ -45,10 +73,15 @@ export default {
       activeColorSecondary: String,
       activeColorText: String,
       isHeaderOverlaid: Boolean,
+      isMobileMenuActive: false,
     };
   },
 
-  computed: {},
+  computed: {
+    isMobile: function() {
+      return window.isMobile();
+    },
+  },
 
   watch: {
     $route() {
@@ -56,9 +89,24 @@ export default {
     },
   },
   methods: {
+    toggleMobileMenu() {
+      this.isMobileMenuActive = !this.isMobileMenuActive;
+    },
+
+    openMobileMenu() {
+      this.isMobileMenuActive = true;
+    },
+
+    closeMobileMenu() {
+      this.isMobileMenuActive = false;
+    },
+
     handleNavigation(route) {
       if (this.$router.currentRoute.fullPath != route) {
         this.$router.push(route);
+      }
+      if (this.isMobile) {
+        this.closeMobileMenu();
       }
     },
 
@@ -137,9 +185,7 @@ export default {
       let page = undefined;
 
       if (split.length == 3) {
-        console.log(this.pages);
         const parent = this.pages.find((page) => page.slug === "/" + split[1]);
-        console.log(parent);
         if (parent != undefined && parent.subItems != undefined) {
           let child = parent.subItems.find((item) => item.slug === path);
           page = child;
@@ -170,6 +216,7 @@ export default {
 
     getHeaderTextStyle() {
       return {
+        zIndex: 6,
         color: this.activeColorPrimary,
       };
     },
@@ -187,7 +234,6 @@ export default {
 
 h1 {
   user-select: none;
-  margin-right: 64px;
   cursor: pointer;
   font-size: 31px;
   letter-spacing: 1.55px;
@@ -197,7 +243,17 @@ h1 {
   font-family: "Spinnaker", sans-serif;
 }
 
+.hamburger-menu {
+  z-index: 30;
+  fill: #fff;
+  height: 48px;
+  width: 48px;
+  margin-right: 32px;
+}
+
 #nav {
+  margin-left: 64px;
+
   cursor: pointer;
   display: flex;
   vertical-align: middle;
@@ -205,7 +261,23 @@ h1 {
   height: 100%;
 }
 
-.header-item {
+#nav-mobile {
+  margin-left: 64px;
+
+  cursor: pointer;
+  display: flex;
+  vertical-align: middle;
+  align-items: center;
+  height: 100%;
+}
+
+.overlay-wrapper {
+  margin-top: 96px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
   display: var(--displayHome);
   font-family: "Questrial", sans-serif;
   font-size: 19px;
@@ -219,12 +291,41 @@ h1 {
   text-decoration: none;
 }
 
-.sub-menu-item {
-}
+.menu-item-mobile {
+  display: var(--displayHome);
+  font-family: "Questrial", sans-serif;
+  font-size: 32px;
+  text-align: left;
 
+  padding: 22px 32px;
+  color: #fff;
+  user-select: none;
+  text-transform: uppercase;
+  font-weight: 100;
+  text-decoration: none;
+}
 .sub-menu-item:hover {
   background: #333;
 }
+
+.sub-menu-item-mobile {
+  padding-left: 12px;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.hamburger-button-wrapper {
+  z-index: 6;
+}
+
+::v-deep .v-overlay {
+  align-items: flex-start;
+  justify-content: start;
+}
+
+// ::v-deep .v-overlay__scrim {
+//   opacity: 0.86 !important;
+// }
 
 .header-item:hover {
   color: var(--button-text-color);

@@ -2,13 +2,13 @@
   <div class="art-section">
     <CoolLightBox :items="images" :index="index" @close="index = null" />
     <div
-      v-for="(column, index) in Section.columns"
+      v-for="(column, index) in columnCount"
       class="art-section-column"
       :key="index"
     >
       <img
         class="artwork"
-        v-for="(item, index) in Section.columns"
+        v-for="(item, index) in columnCount"
         :key="index"
         :src="getURL(trueIndex(index, column))"
         :alt="getAlt(trueIndex(index, column))"
@@ -37,11 +37,20 @@ export default {
     },
   },
 
+  computed: {
+    columnCount: function() {
+      if (window.isMobile()) {
+        return 1;
+      } else return this.Section.columns;
+    },
+  },
+
   methods: {
     getImagesForColumn(column) {
-      return this.images.filter(
-        (a, i) => i % this.Section.columns === column - 1
+      console.log(
+        this.images.filter((a, i) => i % this.columnCount === column - 1)
       );
+      return this.images.filter((a, i) => i % this.columnCount === column - 1);
     },
 
     getAllImages() {

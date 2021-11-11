@@ -12,6 +12,7 @@ import * as contentful from "contentful";
 import Page from "./components/Page.vue";
 import VueMeta from "vue-meta";
 import Vuelidate from "vuelidate";
+import Helpers from "./mixins/helpers";
 
 const client = contenful.createClient({
   space: "r1wfevxudzi5",
@@ -21,6 +22,7 @@ const client = contenful.createClient({
 // Importing the global css file
 import "@/assets/global.scss";
 
+Vue.mixin(Helpers);
 Vue.mixin(contentfulMixins);
 Vue.use(VueRouter);
 Vue.config.productionTip = false;
@@ -34,9 +36,16 @@ import {
   faDeviantart,
 } from "@fortawesome/free-brands-svg-icons";
 
+import { faArrowAltCircleDown } from "@fortawesome/free-regular-svg-icons";
+
 import vuetify from "./plugins/vuetify";
 
-library.add([faTwitterSquare, faInstagramSquare, faDeviantart]);
+library.add([
+  faTwitterSquare,
+  faInstagramSquare,
+  faDeviantart,
+  faArrowAltCircleDown,
+]);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 console.log("Setting up new Vue");
 

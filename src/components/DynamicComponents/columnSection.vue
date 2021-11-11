@@ -1,5 +1,5 @@
 <template>
-  <v-row class="pagesContainer">
+  <v-row class="pagesContainer" v-if="!isMobile">
     <v-col
       v-for="({ sectionComponent, content }, index) in columnSections"
       :key="index"
@@ -24,6 +24,12 @@ export default {
     };
   },
 
+  computed: {
+    isMobile: function() {
+      return window.isMobile();
+    },
+  },
+
   props: {
     Section: {
       type: Object,
@@ -32,6 +38,11 @@ export default {
   },
 
   methods: {
+    getColumnCount() {
+      if (window.isMobile()) return 1;
+      return this.columnSections.size;
+    },
+
     getComponentType(item) {
       if (
         item &&
