@@ -4,16 +4,16 @@
       Copyright © 2020 Martina Scafa
     </p>
     <div class="social-wrapper">
-      <a href="https://www.artstation.com/martinascafa">
+      <a target="blank" href="https://www.artstation.com/martinascafa">
         <v-img class="social-icon" src="../assets/ICON_artstation.png" />
       </a>
-      <a href="https://twitter.com/ThingsThatLurk">
+      <a target="blank" href="https://twitter.com/ThingsThatLurk">
         <v-img class="social-icon" src="../assets/ICON_twitter.png" />
       </a>
-      <a href="https://www.instagram.com/thingsthatlurk/">
+      <a target="blank" href="https://www.instagram.com/thingsthatlurk/">
         <v-img class="social-icon" src="../assets/ICON_instagram.png" />
       </a>
-      <a href="mailto:scafa.martina@gmail.com">
+      <a target="blank" href="mailto:scafa.martina@gmail.com">
         <v-img class="social-icon" src="../assets/ICON_mail.png" />
       </a>
     </div>
