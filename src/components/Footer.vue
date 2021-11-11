@@ -3,43 +3,32 @@
     <p class="footer-text">
       Copyright © 2020 Martina Scafa
     </p>
-    <SocialIcon
-      :targetURL="'https://twitter.com/thingsthatlurk'"
-      :prefix="'fab'"
-      :icon="'twitter-square'"
-      :size="'2x'"
-      :color="'#fff'"
-    />
-    <SocialIcon
-      :targetURL="'https://twitter.com/heyitsmaat'"
-      :prefix="'fab'"
-      :icon="'deviantart'"
-      :size="'2x'"
-      :color="'#fff'"
-    />
-    <SocialIcon
-      :targetURL="'https://twitter.com/heyitsmaat'"
-      :prefix="'fab'"
-      :icon="'instagram-square'"
-      :size="'2x'"
-      :color="'#fff'"
-    />
+    <div class="social-wrapper">
+      <a href="https://www.artstation.com/martinascafa">
+        <v-img class="social-icon" src="../assets/ICON_artstation.png" />
+      </a>
+      <a href="https://twitter.com/ThingsThatLurk">
+        <v-img class="social-icon" src="../assets/ICON_twitter.png" />
+      </a>
+      <a href="https://www.instagram.com/thingsthatlurk/">
+        <v-img class="social-icon" src="../assets/ICON_instagram.png" />
+      </a>
+      <a href="mailto:scafa.martina@gmail.com">
+        <v-img class="social-icon" src="../assets/ICON_mail.png" />
+      </a>
+    </div>
   </div>
 </template>
 
 <script>
-import SocialIcon from "../components/SocialIcon";
-export default {
-  components: {
-    SocialIcon,
-  },
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
 .footer-container {
   padding: 8;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   bottom: 0;
@@ -51,5 +40,16 @@ export default {
 }
 .footer-text {
   color: rgb(214, 214, 214);
+}
+
+.social-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.social-icon {
+  margin: 8px;
+  width: 36px;
+  height: 36px;
 }
 </style>
