@@ -1,14 +1,18 @@
 <template>
-  <v-row class="pagesContainer" v-if="!isMobile">
-    <v-col
-      v-for="({ sectionComponent, content }, index) in columnSections"
-      :key="index"
-      class="d-flex child-flex"
-      :cols="columnSections.size"
-    >
-      <component :is="sectionComponent" :key="index" :Section="content" />
-    </v-col>
-  </v-row>
+  <v-container>
+    <v-row class="pagesContainer" :style="getColumnStyle()">
+      <v-col
+        v-for="({ sectionComponent, content }, index) in columnSections"
+        :key="index"
+        cols="12"
+        md="4"
+        sm="1"
+        class="d-flex child-flex"
+      >
+        <component :is="sectionComponent" :key="index" :Section="content" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -19,6 +23,7 @@ export default {
 
   data() {
     return {
+      justifyContent: "",
       columnSections: [],
       imageStyle: "",
     };
@@ -32,6 +37,14 @@ export default {
   },
 
   methods: {
+    getColumnStyle() {
+      var justify = this.Section.dcJustifyContent;
+      if (justify === null || justify === undefined) justify = "inherit";
+      return {
+        justifyContent: justify,
+      };
+    },
+
     getColumnCount() {
       if (this.isMobile()) return 1;
       return this.columnSections.size;
