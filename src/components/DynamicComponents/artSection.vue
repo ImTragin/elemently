@@ -1,20 +1,19 @@
 <template>
   <div class="art-section">
     <CoolLightBox :items="images" :index="index" @close="index = null" />
-    <div
-      v-for="(column, index) in columnCount"
-      class="art-section-column"
-      :key="index"
+    <masonry
+      :cols="{ default: 3, 1000: 2, 700: 2, 640: 1 }"
+      :gutter="{ default: '5px', 700: '15px' }"
     >
       <img
+        v-for="(column, index) in images"
         class="artwork"
-        v-for="(item, index) in columnCount"
         :key="index"
-        :src="getURL(trueIndex(index, column))"
-        :alt="getAlt(trueIndex(index, column))"
-        @click="click(trueIndex(index, column))"
+        :src="getURL(index)"
+        :alt="getAlt(index, column)"
+        @click="click(index, column)"
       />
-    </div>
+    </masonry>
   </div>
 </template>
 
@@ -37,22 +36,7 @@ export default {
     },
   },
 
-  computed: {
-    columnCount: function() {
-      if (window.isMobile()) {
-        return 1;
-      } else return this.Section.columns;
-    },
-  },
-
   methods: {
-    getImagesForColumn(column) {
-      console.log(
-        this.images.filter((a, i) => i % this.columnCount === column - 1)
-      );
-      return this.images.filter((a, i) => i % this.columnCount === column - 1);
-    },
-
     getAllImages() {
       var string = "";
       const map = new Map();
@@ -89,10 +73,6 @@ export default {
         return this.images[index].title;
       }
     },
-
-    trueIndex(index, column) {
-      return index * 2 + column - 1;
-    },
   },
   components: {
     CoolLightBox,
@@ -106,7 +86,6 @@ export default {
 
 <style lang="scss" scoped>
 .artwork {
-  margin: 5px 5px;
   max-width: 100%;
 }
 

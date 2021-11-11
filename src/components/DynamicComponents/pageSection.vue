@@ -1,36 +1,39 @@
 <template>
-  <v-row class="pagesContainer">
-    <v-col
-      v-for="(item, index) in pages"
-      :key="index"
-      class="d-flex child-flex"
-      cols="6"
-    >
-      <v-hover v-slot="{ hover }">
-        <div @click="handleClick(item)">
-          <v-img
-            v-if="isCoverImageAvailable(item)"
-            :src="item.fields.coverImage.fields.file.url"
-            aspect-ratio="1.7778"
-            class="grey lighten-2"
-          >
-            <template v-slot:placeholder>
-              <v-row class="fill-height ma-0" align="center" justify="center">
-                <v-progress-circular
-                  indeterminate
-                  color="grey lighten-5"
-                ></v-progress-circular>
-              </v-row>
-            </template>
-            <v-fade-transition>
-              <v-overlay v-if="hover" absolute color="#ffffff"> </v-overlay>
-            </v-fade-transition>
-          </v-img>
-          <h2 class="textTitle">{{ item.title }}</h2>
-        </div>
-      </v-hover>
-    </v-col>
-  </v-row>
+  <v-container class="grey lighten-5">
+    <v-row v-masonery>
+      <v-col
+        v-for="(item, index) in pages"
+        cols="12"
+        md="6"
+        :key="index"
+        class="d-flex child-flex"
+      >
+        <v-hover v-slot="{ hover }">
+          <div @click="handleClick(item)">
+            <v-img
+              v-if="isCoverImageAvailable(item)"
+              :src="item.fields.coverImage.fields.file.url"
+              aspect-ratio="1.7778"
+              class="grey lighten-2"
+            >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
+              <v-fade-transition>
+                <v-overlay v-if="hover" absolute color="#ffffff"> </v-overlay>
+              </v-fade-transition>
+            </v-img>
+            <h2 class="textTitle">{{ item.title }}</h2>
+          </div>
+        </v-hover>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script>
 export default {
@@ -94,7 +97,9 @@ export default {
 </script>
 
 <style>
-.pagesContainer {
-  padding: 32px;
+@media only screen and (min-width: 1366px) {
+  .pagesContainer {
+    padding: 32px;
+  }
 }
 </style>

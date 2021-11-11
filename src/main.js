@@ -13,6 +13,7 @@ import Page from "./components/Page.vue";
 import VueMeta from "vue-meta";
 import Vuelidate from "vuelidate";
 import Helpers from "./mixins/helpers";
+import VueMasonry from "vue-masonry-css";
 
 const client = contenful.createClient({
   space: "r1wfevxudzi5",
@@ -29,6 +30,7 @@ Vue.config.productionTip = false;
 Vue.use(Vuetify);
 Vue.use(VueMeta);
 Vue.use(Vuelidate);
+Vue.use(VueMasonry);
 
 import {
   faTwitterSquare,
