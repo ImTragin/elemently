@@ -46,7 +46,7 @@ export default {
   left: 0;
   overflow: hidden;
   right: 0;
-  height: 48px;
+  height: 6em;
   background: #000;
 }
 .footer-text {
