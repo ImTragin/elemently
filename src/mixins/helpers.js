@@ -1,5 +1,11 @@
 export default {
   methods: {
+    getResizedHeaderImageUrl: function(baseURL) {
+      return (
+        "https://" + baseURL + `?w=${window.innerWidth}&h=${window.innerHeight}`
+      );
+    },
+
     getResizedImageUrl: function(baseURL) {
       return "https://" + baseURL + "?w=640&h=1024";
     },
