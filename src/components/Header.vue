@@ -2,7 +2,14 @@
   <div class="header-container" :style="getHeaderStyle()">
     <div v-if="isMobile()" class="hamburger-button-wrapper">
       <img
+        v-if="isDarkMode"
         src="@/assets/menu.svg"
+        class="hamburger-menu"
+        @click="toggleMobileMenu"
+      />
+      <img
+        v-if="!isDarkMode"
+        src="@/assets/menu_dark.svg"
         class="hamburger-menu"
         @click="toggleMobileMenu"
       />
@@ -72,6 +79,7 @@ export default {
       activeColorPrimary: String,
       activeColorSecondary: String,
       activeColorText: String,
+      isDarkMode: Boolean,
       isHeaderOverlaid: Boolean,
       isMobileMenuActive: false,
     };
@@ -195,6 +203,7 @@ export default {
       }
 
       if (page != undefined) {
+        this.isDarkMode = page.style.isDarkTheme;
         this.activeColorPrimary = page.style.isDarkTheme ? "#fff" : "#000";
         this.activeColorSecondary = page.style.isDarkTheme ? "#fff" : "#444";
         this.activeColorText = page.style.isDarkTheme ? "#444" : "#fff";
