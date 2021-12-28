@@ -10,7 +10,6 @@
           :value="fieldData"
         />
         <v-btn class="mr-4" @click="submit">Submit</v-btn>
-        <v-btn class="mr-4" @click="clearData">Clear</v-btn>
       </v-container>
     </form>
 
@@ -52,7 +51,6 @@
 const axios = require("axios");
 export default {
   beforeMount() {
-    var string = "";
     const map = new Map();
 
     const ids = this.Section.fields.map((element) => {
