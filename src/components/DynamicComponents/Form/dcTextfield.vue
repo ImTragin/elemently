@@ -1,18 +1,34 @@
 <template>
   <v-text-field
-    v-model="value[title]"
+    v-model="localValue"
     :label="title"
-    required
-    @input="$v.field.$touch()"
-    @blur="$v.field.$touch()"
+    ref="inputField"
+    error
+    :rules="rules"
   />
 </template>
 
 <script>
-import { required, maxLength } from "vuelidate/lib/validators";
 export default {
-  validations: {
-    field: { required, maxLength: maxLength(30) },
+  data: () => ({
+    localValue: "",
+    rules: [
+      (value) => !!value || "Required.",
+      (value) => value.length <= 60 || "Max 60 characters",
+      (value) => value.length >= 5 || "Min 5 characters",
+    ],
+  }),
+
+  watch: {
+    localValue: {
+      handler(newValue) {
+        this.$emit("formChange", {
+          key: this.title,
+          value: newValue,
+          isValid: this.$refs.inputField.validate()
+        });
+      },
+    },
   },
   props: {
     title: {
@@ -20,12 +36,8 @@ export default {
       default: "",
     },
     value: {
-      type: Object,
+      type: String,
     },
-  },
-  model: {
-    prop: "value",
-    event: "valueList",
   },
 };
 </script>

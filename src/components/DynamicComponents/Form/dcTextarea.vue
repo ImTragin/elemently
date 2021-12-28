@@ -1,18 +1,33 @@
 <template>
   <v-textarea
-    v-model="value[title]"
+    v-model="localValue"
     :label="title"
-    required
-    @input="$v.field.$touch()"
-    @blur="$v.field.$touch()"
+    clearable
+    :rules="rules"
+    error
+    ref="inputField"
   />
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
 export default {
-  validations: {
-    field: { required },
+  data: () => ({
+    localValue: "",
+    rules: [
+      (value) => !!value || "Required.",
+      (value) => value.length >= 5 || "Min 5 characters",
+    ],
+  }),
+  watch: {
+    localValue: {
+      handler(newValue) {
+        this.$emit("formChange", {
+          key: this.title,
+          value: newValue, 
+          isValid: this.$refs.inputField.validate()
+        });
+      },
+    },
   },
   props: {
     title: {
@@ -20,7 +35,7 @@ export default {
       default: "",
     },
     value: {
-      type: Object,
+      type: String,
     },
   },
 };

@@ -1,17 +1,18 @@
 <template>
   <div>
-    <form v-if="isFormVisible">
+    <v-form v-if="isFormVisible">
       <v-container>
         <component
           v-for="({ component, title }, index) in fieldItems"
+          v-on:formChange="handleFormChange"
           :key="index"
           :is="component"
           :title="title"
-          :value="fieldData"
+          :value="getVModelForData(title)"
         />
         <v-btn class="mr-4" @click="submit">Submit</v-btn>
       </v-container>
-    </form>
+    </v-form>
 
     <div v-if="!isFormVisible">
       Thank you for your message. I'll get back to your shortly!
@@ -25,7 +26,7 @@
     >
       <v-card color="primary" dark>
         <v-card-text>
-          Please stand by
+          Sending your message, please wait a moment...
           <v-progress-linear
             indeterminate
             color="#fff"
@@ -39,7 +40,12 @@
       {{ errorMessageText }}
 
       <template v-slot:action="{ attrs }">
-        <v-btn color="#FFC0CB" text v-bind="attrs" @click="snackbar = false">
+        <v-btn
+          color="#FFC0CB"
+          text
+          v-bind="attrs"
+          @click="showErrorMessage = false"
+        >
           Close
         </v-btn>
       </template>
@@ -51,8 +57,6 @@
 const axios = require("axios");
 export default {
   beforeMount() {
-    const map = new Map();
-
     const ids = this.Section.fields.map((element) => {
       return element.sys.id;
     });
@@ -64,11 +68,13 @@ export default {
         let element = item.fields;
         let component = this.convertToCorrectType(element.type);
         let title = element.title;
+        let type = element.type;
         this.fieldItems.push({
           component,
           title,
+          type,
         });
-        this.fieldData[title] = "";
+        this.fieldData[title] = { value: "", isValid: false };
       });
     });
   },
@@ -90,37 +96,51 @@ export default {
   }),
 
   methods: {
+    getVModelForData(title) {
+      return this.fieldData[title].value;
+    },
+    handleFormChange(event) {
+      this.fieldData[event.key] = {
+        value: event.value,
+        isValid: event.isValid,
+      };
+    },
     submit() {
-      this.isSendingDialogVisible = true;
-      axios
-        .post(
-          "https://getform.io/f/22ffb686-af9d-43dc-abfb-88c4b4ca9fe7",
-          this.fieldData
-        )
-        .catch((error) => {
-          if (
-            error !== undefined &&
-            error.response !== undefined &&
-            error.response.status === 429
-          ) {
-            this.showErrorMessage = true;
-            this.errorMessageText =
-              "Please wait 60 seconds before sending another message";
-          } else {
-            this.showErrorMessage = true;
-            this.errorMessageText =
-              "We ran into an unknown error when sending your message, please try again.";
-          }
-          this.isSendingDialogVisible = false;
-        })
-        .then((response) => {
-          if (response !== undefined) {
-            if (response.status === 200) {
-              this.isSendingDialogVisible = false;
-              this.isFormVisible = false;
+      if (this.validateFields()) {
+        this.isSendingDialogVisible = true;
+        axios
+          .post(
+            "https://getform.io/f/22ffb686-af9d-43dc-abfb-88c4b4ca9fe7",
+            this.fieldData
+          )
+          .catch((error) => {
+            if (
+              error !== undefined &&
+              error.response !== undefined &&
+              error.response.status === 429
+            ) {
+              this.showErrorMessage = true;
+              this.errorMessageText =
+                "Please wait 60 seconds before sending another message";
+            } else {
+              this.showErrorMessage = true;
+              this.errorMessageText =
+                "We ran into an unknown error when sending your message, please try again.";
             }
-          }
-        });
+            this.isSendingDialogVisible = false;
+          })
+          .then((response) => {
+            if (response !== undefined) {
+              if (response.status === 200) {
+                this.isSendingDialogVisible = false;
+                this.isFormVisible = false;
+              }
+            }
+          });
+      } else {
+        this.showErrorMessage = true;
+        this.errorMessageText = "Please make sure you enter the form correctly";
+      }
     },
 
     convertToCorrectType(contentfulType) {
@@ -134,6 +154,12 @@ export default {
         default:
           break;
       }
+    },
+
+    validateFields() {
+      return Object.values(this.fieldData).every((item) => {
+        return item.isValid === true;
+      });
     },
   },
 };
