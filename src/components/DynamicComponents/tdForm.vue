@@ -111,7 +111,7 @@ export default {
         axios
           .post(
             "https://getform.io/f/22ffb686-af9d-43dc-abfb-88c4b4ca9fe7",
-            this.fieldData
+            this.cleanData()
           )
           .catch((error) => {
             if (
@@ -160,6 +160,14 @@ export default {
       return Object.values(this.fieldData).every((item) => {
         return item.isValid === true;
       });
+    },
+
+    cleanData() {
+      let cleanedData = {};
+      for (const [key, value] of Object.entries(this.fieldData)) {
+        cleanedData[key] = value.value;
+      }
+      return cleanedData
     },
   },
 };
