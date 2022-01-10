@@ -19,7 +19,7 @@
     </h1>
     <div id="nav" v-if="!isMobile()">
       <div
-        v-for="(page, index) in pages"
+        v-for="(page, index) in menuItems"
         :key="index"
         :style="cssVars(page.slug)"
       >
@@ -83,6 +83,12 @@ export default {
       isHeaderOverlaid: Boolean,
       isMobileMenuActive: false,
     };
+  },
+
+  computed: {
+    menuItems(){
+      return this.pages.filter(bar => bar.isVisibleAsMenuItem !== false)
+    }
   },
 
   watch: {
@@ -157,6 +163,7 @@ export default {
                   subpages.push({
                     slug: slug,
                     title: element.fields.title,
+                    isVisibleAsMenuItem: element.fields.isVisibleInMenu,
                     style: {
                       isDarkTheme: element.fields.theme,
                       isHeaderOverlay: element.fields.overlayHeader,
@@ -166,10 +173,10 @@ export default {
               }
             });
           }
-
           this.pages.push({
             slug: `/${route.fields.slug ? route.fields.slug : ""}`,
             title: route.fields.title,
+            isVisibleAsMenuItem: route.fields.isVisibleInMenu,
             style: {
               isDarkTheme: route.fields.theme,
               isHeaderOverlay: route.fields.overlayHeader,
