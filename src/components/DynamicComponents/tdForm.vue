@@ -139,7 +139,7 @@ export default {
           });
       } else {
         this.showErrorMessage = true;
-        this.errorMessageText = "Please make sure you enter the form correctly";
+        this.errorMessageText = "Please make sure you entered the form correctly";
       }
     },
 
