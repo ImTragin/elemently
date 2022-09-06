@@ -1,8 +1,8 @@
 <template>
   <div class="Page-Header-Container">
     <div class="Page-Header">
-      <h1 class="Page-Title">Martina Scafa</h1>
-      <h3 class="Page-Subtitle">Illustrator & Concept Artist</h3>
+      <h1 class="Page-Title">Elemently</h1>
+      <h3 class="Page-Subtitle">Contentful Components Library</h3>
     </div>
   </div>
 </template>

@@ -53,7 +53,7 @@ console.log("Setting up new Vue");
 
 router.afterEach((to, from) => {
   Vue.nextTick(() => {
-    document.title = `${to.name} - Martina Scafa` || "Martina Scafa";
+    document.title = `Elemently`;
   });
 });
 

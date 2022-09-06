@@ -5,12 +5,12 @@
       class="Page-Header"
       :style="getPageHeaderStyling()"
     />
-    <component
+    <!-- <component
       v-for="({ sectionComponent, content }, index) in PageSections"
       :is="sectionComponent"
       :key="index"
       :Section="content"
-    />
+    /> -->
   </div>
 </template>
 
@@ -65,7 +65,7 @@ export default {
           if (contentType != undefined) {
             let content = section.fields;
             let sectionComponent = () =>
-              import(`./DynamicComponents/${contentType}`);
+              import(`./Elemently/${contentType}`);
             this.PageSections.push({
               sectionComponent,
               content,

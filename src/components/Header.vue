@@ -15,7 +15,7 @@
       />
     </div>
     <h1 :style="getHeaderTextStyle()" @click="$router.push('/')">
-      Martina Scafa
+      Elemently
     </h1>
     <div id="nav" v-if="!isMobile()">
       <div

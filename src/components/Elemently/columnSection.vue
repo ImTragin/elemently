@@ -75,7 +75,7 @@ export default {
           if (element != undefined) {
             let componentType = this.getComponentType(element);
             let sectionComponent = () =>
-              import(`../DynamicComponents/${componentType}`);
+              import(`../Elemently/${componentType}`);
 
             let content = element.fields;
 

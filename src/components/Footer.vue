@@ -1,19 +1,19 @@
 <template>
   <div class="footer-container">
     <p class="footer-text">
-      Copyright © 2020 Martina Scafa
+      Copyright © 2020 Elemently
     </p>
     <div class="social-wrapper">
-      <a target="blank" href="https://www.artstation.com/martinascafa">
+      <a target="blank" href="">
         <v-img class="social-icon" src="../assets/ICON_artstation.png" />
       </a>
-      <a target="blank" href="https://twitter.com/ThingsThatLurk">
+      <a target="blank" href="">
         <v-img class="social-icon" src="../assets/ICON_twitter.png" />
       </a>
-      <a target="blank" href="https://www.instagram.com/thingsthatlurk/">
+      <a target="blank" href="">
         <v-img class="social-icon" src="../assets/ICON_instagram.png" />
       </a>
-      <a target="blank" href="mailto:scafa.martina@gmail.com">
+      <a target="blank" href="">
         <v-img class="social-icon" src="../assets/ICON_mail.png" />
       </a>
     </div>
